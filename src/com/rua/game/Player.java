@@ -105,7 +105,7 @@ public class Player {
 		int[][] mapTiles = map.getMapTiles();
 		
 		if( this.right ) { // if is going to right
-			int tileRight = ( Math.abs(map.getX() - player.getWidth()/2) + GamePanel.WIDTH/2 )/Map.TILE_SIZE;
+			int tileRight = ( Math.abs(map.getX()) + GamePanel.WIDTH/2 + player.getWidth()/2 )/Map.TILE_SIZE;
 			int tileUp = ( Math.abs(map.getY()) + GamePanel.HEIGHT/2 )/Map.TILE_SIZE;
 
 			if(mapTiles[tileUp][tileRight] == 1) {
@@ -114,7 +114,7 @@ public class Player {
 		}
 		
 		if( this.left ) { // if is going to left
-			int tileLeft = ( Math.abs(map.getX() - player.getWidth()) + GamePanel.WIDTH/2 )/Map.TILE_SIZE - 1;
+			int tileLeft = ( Math.abs(map.getX() ) + GamePanel.WIDTH/2 - player.getWidth()/2 )/Map.TILE_SIZE;
 			int tileUp = ( Math.abs(map.getY()) + GamePanel.HEIGHT/2 )/Map.TILE_SIZE;
 
 			if(mapTiles[tileUp][tileLeft] == 1) {
@@ -124,10 +124,18 @@ public class Player {
 		
 		if( this.up ) { // if is going to right
 			int tileLeft = ( Math.abs(map.getX()) + GamePanel.WIDTH/2 )/Map.TILE_SIZE;
-			int tileUp = ( Math.abs(map.getY() - player.getHeight()) + GamePanel.HEIGHT/2 )/Map.TILE_SIZE - 1;
-			System.out.println(tileLeft+ "-" + tileUp);
-			System.out.println(mapTiles[tileUp][tileLeft]);
+			int tileUp = ( Math.abs(map.getY()) + GamePanel.HEIGHT/2 - player.getHeight()/2 )/Map.TILE_SIZE;
+
 			if(mapTiles[tileUp][tileLeft] == 1) {
+				this.vY = 0;
+			}
+		}
+		
+		if( this.down ) { // if is going to right
+			int tileLeft = ( Math.abs(map.getX()) + GamePanel.WIDTH/2 )/Map.TILE_SIZE;
+			int tileDown = ( Math.abs(map.getY()) + GamePanel.HEIGHT/2 + player.getHeight()/2 )/Map.TILE_SIZE;
+
+			if(mapTiles[tileDown][tileLeft] == 1) {
 				this.vY = 0;
 			}
 		}
