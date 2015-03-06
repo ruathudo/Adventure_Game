@@ -19,15 +19,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	public static final int WIDTH = 320;  
 	public static final int HEIGHT = 320;  
 
-	
-	private Player player = new Player();
 	private Map map = new Map();
+	private Player player = new Player(map);
+	
 		
 	public GamePanel() {
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true);
 		requestFocus();
-		setBackground(Color.LIGHT_GRAY);
+		setBackground(Color.BLACK);
 		tm.start(); 
 		loopStart();
 		addKeyListener(this);  // Add key listener to this GamePanel
@@ -45,7 +45,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			public void run() {
 	
 				while(true) {
-					player.update(map); // start moving player
+					player.update(); // start moving player
 					try {
 						Thread.sleep(10);
 					}
