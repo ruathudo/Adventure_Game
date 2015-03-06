@@ -18,20 +18,22 @@ public class Player {
 	private BufferedImage player;
 	
 	public Player() {
-		this.x = GamePanel.WIDTH / 2;
-		this.y = GamePanel.HEIGHT / 2;
+		try {
+			// get the player image source
+			this.player = ImageIO.read(new File("Assets/Sprites/player.png"));
+			// make the player stand in the center of window
+			this.x = (GamePanel.WIDTH - player.getWidth()) / 2; 
+			this.y = (GamePanel.HEIGHT - player.getHeight()) / 2;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/*
 	 * Draw player image
 	 */
 	public void draw(Graphics g) {
-		try {
-			this.player = ImageIO.read(new File("Assets/Sprites/player.png"));
-			g.drawImage(player, getX(), getY(), null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			g.drawImage(player, getX(), getY(), null);	
 	}
 
 	public BufferedImage getImage() {
@@ -89,6 +91,7 @@ public class Player {
 	public void update(Map map) {
 		int mapX = map.getX();  // get current Map x, y
 		int mapY = map.getY();
+		collide(map);
 		map.setX( mapX - vX );  // update new Map x, y
 		map.setY( mapY - vY );
 	}
@@ -100,10 +103,34 @@ public class Player {
 	
 	private void collide(Map map) {
 		int[][] mapTiles = map.getMapTiles();
-		// tileleft = (abs(map.getX()) + player.x ) / tileSize + 1;	
-		// tileRight = (abs(map.getX()) + player.x ) / tileSize - 1;
-		// Or tileLeft = (map.Width - window.Width) / 2 + 1
-		// if the player always in the middle of window
+		
+		if( this.right ) { // if is going to right
+			int tileRight = ( Math.abs(map.getX() - player.getWidth()/2) + GamePanel.WIDTH/2 )/Map.TILE_SIZE;
+			int tileUp = ( Math.abs(map.getY()) + GamePanel.HEIGHT/2 )/Map.TILE_SIZE;
+
+			if(mapTiles[tileUp][tileRight] == 1) {
+				this.vX = 0;
+			}
+		}
+		
+		if( this.left ) { // if is going to left
+			int tileLeft = ( Math.abs(map.getX() - player.getWidth()) + GamePanel.WIDTH/2 )/Map.TILE_SIZE - 1;
+			int tileUp = ( Math.abs(map.getY()) + GamePanel.HEIGHT/2 )/Map.TILE_SIZE;
+
+			if(mapTiles[tileUp][tileLeft] == 1) {
+				this.vX = 0;
+			}
+		}
+		
+		if( this.up ) { // if is going to right
+			int tileLeft = ( Math.abs(map.getX()) + GamePanel.WIDTH/2 )/Map.TILE_SIZE;
+			int tileUp = ( Math.abs(map.getY() - player.getHeight()) + GamePanel.HEIGHT/2 )/Map.TILE_SIZE - 1;
+			System.out.println(tileLeft+ "-" + tileUp);
+			System.out.println(mapTiles[tileUp][tileLeft]);
+			if(mapTiles[tileUp][tileLeft] == 1) {
+				this.vY = 0;
+			}
+		}
 	}
 	
 }
