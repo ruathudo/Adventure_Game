@@ -34,11 +34,14 @@ public class GameEngine {
 	public void gameLogic() {
 		// check collision
 		int collision = collision();
-		if( (player.isRight() || player.isLeft()) && collision == 1)
+		if( (player.isRight() || player.isLeft()) && collision == 1 )  // if is wall => stop
 			player.setVx(0);
-		if( (player.isUp() || player.isDown()) && collision == 1)
+		if( (player.isUp() || player.isDown()) && collision == 1 )
 			player.setVy(0);
-		//if( collision == 5 )
+		//if( collision == 3 )  // if is water => die
+		
+		//if( collision == 10 )
+			
 		
 	}
 	
@@ -84,51 +87,23 @@ public class GameEngine {
 	 */
 
 	public void keyUp() {
-		// check if the user go out the map
-		if( map.getY() >= 0) {
-			player.setVy(0);
-			map.setY(0);
-		} else {
-			player.setVy(-3);
-		}
+		player.setVy(-3);
 		player.goUp();
-		
 	}
 
 	public void keyDown() {
-		// if the user go out the map
-		if( map.getY() <=  GamePanel.HEIGHT - map.getHeight() ) {
-			player.setVy(0);
-			map.setY( GamePanel.HEIGHT - map.getHeight() );
-		} else {
-			player.setVy(3);
-		}
+		player.setVy(3);
 		player.goDown();
-		
 	}
 
 	public void keyLeft() {
-		// if the user go out the map
-		if( map.getX() >= 0) {
-			player.setVx(0);
-			map.setX(0);
-		} else {
-			player.setVx(-3);
-		}
+		player.setVx(-3);
 		player.turnLeft();
-		
 	}
 
 	public void keyRight() {
-		// if the user go out the map
-		if( map.getX() <=  GamePanel.WIDTH - map.getWidth() ) {
-			player.setVx(0);
-			map.setX( GamePanel.WIDTH - map.getWidth() );
-		} else {
-			player.setVx(3);
-		}
+		player.setVx(3);
 		player.turnRight();
-		
 	}
 
 	public void keyRelease() {
