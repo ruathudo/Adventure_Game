@@ -19,8 +19,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	public static final int WIDTH = 320;  
 	public static final int HEIGHT = 320;  
 
-	private Map map = new Map();
-	private Player player = new Player(map);
+	private GameEngine game = new GameEngine();
 	
 		
 	public GamePanel() {
@@ -41,11 +40,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		System.out.println("Starting ");
 		
 		// Thread for player
-		Thread playerUpdate = new Thread ( new Runnable() {
+		Thread gameLoop = new Thread ( new Runnable() {
 			public void run() {
 	
 				while(true) {
-					player.update(); // start moving player
+					game.update(); // start moving player
 					try {
 						Thread.sleep(10);
 					}
@@ -56,7 +55,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			}
 		});
 		
-		playerUpdate.start();
+		gameLoop.start();
 	}
 	
 	
@@ -68,8 +67,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// draw player
-		map.draw(g);
-		player.draw(g);
+		game.draw(g);
 	}
 
 	/*
@@ -81,33 +79,33 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		repaint();
 	}
 
-	/*
-	 * KeyEvent. Get key events to Key Listener
-	 */
+//	/*
+//	 * KeyEvent. Get key events to Key Listener
+//	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 
 		if (keyCode == KeyEvent.VK_UP) {
-			player.goUp(); 
+			game.keyUp(); 
 		}
 
 		if (keyCode == KeyEvent.VK_DOWN) {
-			player.goDown(); 
+			game.keyDown(); 
 			
 		}
 		if (keyCode == KeyEvent.VK_LEFT) {
-			player.turnLeft(); 
+			game.keyLeft(); 
 		}
 
 		if (keyCode == KeyEvent.VK_RIGHT) {
-			player.turnRight();
+			game.keyRight();
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		player.stop();  // stop player when key realeased
+		game.keyRelease();  // stop player when key realeased
 	}
 
 	@Override
@@ -116,6 +114,4 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		
 	}
 
-	
-	
 }
