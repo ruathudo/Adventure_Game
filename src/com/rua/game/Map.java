@@ -16,11 +16,13 @@ public class Map {
 	public static final int MAP_SIZEX  = 40;
 	public static final int MAP_SIZEY  = 40;
 	private HashMap<Integer,BufferedImage> tileImages;
+	private HashMap<String, Room> rooms;
 	private int x, y;  // Map position
 	
 	public Map() {
 		this.x = - (MAP_SIZEX * TILE_SIZE - GamePanel.WIDTH)/2;
 		this.y = - (MAP_SIZEY * TILE_SIZE - GamePanel.HEIGHT)/2;
+		this.rooms = new HashMap<String, Room>(); // create rooms map
 		createBg();
 		loadImage();
 	}
@@ -29,18 +31,39 @@ public class Map {
 	@SuppressWarnings("resource")
 	private void createBg() {
 		this.mapTiles = new int[MAP_SIZEY][MAP_SIZEX];
-		
+		String line;
+		String[] tokens;
 		try {
 			Scanner mapFile = new Scanner(new File("Assets/Maps/map.txt")); // read map file
 			
 			for(int row=0; row < MAP_SIZEY; row++) {
-				String line = mapFile.nextLine();
-				String[] tokens =  line.split(" ");
+				line = mapFile.nextLine();
+				tokens =  line.split(" ");
 				for(int col=0; col < MAP_SIZEX; col++ ) {
 					this.mapTiles[row][col] = Integer.parseInt(tokens[col]);
 				}
-				//System.out.println(line);
+				
 			}
+			
+			// Create 5 rooms object
+			for(int row=MAP_SIZEY+1; row <= MAP_SIZEY+5; row++) {
+				if( mapFile.hasNextLine() ) {
+					line = mapFile.nextLine();
+					tokens =  line.split(" ");
+					
+					String roomName = tokens[0];
+					int roomX = Integer.parseInt(tokens[1]) * TILE_SIZE;
+					int roomY = Integer.parseInt(tokens[1]) * TILE_SIZE;
+					int roomW = Integer.parseInt(tokens[3]) * TILE_SIZE;
+					int roomH = Integer.parseInt(tokens[4]) * TILE_SIZE;
+
+					this.rooms.put(roomName, new Room(roomName,roomX,roomY,roomW,roomH) );
+					
+					System.out.println(tokens[0]);
+				}
+				
+			}
+			
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -57,12 +80,17 @@ public class Map {
 			BufferedImage background = ImageIO.read(new File("Assets/Sprites/background.jpg"));
 			BufferedImage wall = ImageIO.read(new File("Assets/Sprites/wall.png"));
 			BufferedImage tile = ImageIO.read(new File("Assets/Sprites/tile.jpg"));
+			BufferedImage water = ImageIO.read(new File("Assets/Sprites/water.gif"));
 			BufferedImage flashlight = ImageIO.read(new File("Assets/Sprites/flashlight.jpg"));
 			
+			//map start from 0
 			this.tileImages.put(0, background);
 			this.tileImages.put(1, wall);
 			this.tileImages.put(2, tile);
-			this.tileImages.put(4, flashlight);
+			this.tileImages.put(3, water);
+			
+			//stuff start from 10
+			this.tileImages.put(10, flashlight);
 			
 		} catch (IOException e) {
 			e.printStackTrace();

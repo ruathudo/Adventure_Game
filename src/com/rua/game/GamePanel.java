@@ -46,7 +46,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 				while(true) {
 					game.update(); // start moving player
 					try {
-						Thread.sleep(10);
+						Thread.sleep(30); // ~30 fps
 					}
 					catch(Exception e) {
 						e.printStackTrace();
@@ -79,9 +79,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		repaint();
 	}
 
-//	/*
-//	 * KeyEvent. Get key events to Key Listener
-//	 */
+	/*
+	 * KeyEvent. Get key events to Key Listener
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();

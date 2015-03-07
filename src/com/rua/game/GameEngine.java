@@ -2,15 +2,18 @@ package com.rua.game;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 
 public class GameEngine {
 	private Map map;
 	private Player player;
+	private ArrayList collection;
 	
 	public GameEngine() {
 		map = new Map();
 		player = new Player();
+		collection = new ArrayList();
 	}
 	
 	public void draw(Graphics g) {
@@ -35,6 +38,7 @@ public class GameEngine {
 			player.setVx(0);
 		if( (player.isUp() || player.isDown()) && collision == 1)
 			player.setVy(0);
+		//if( collision == 5 )
 		
 	}
 	
@@ -85,7 +89,7 @@ public class GameEngine {
 			player.setVy(0);
 			map.setY(0);
 		} else {
-			player.setVy(-2);
+			player.setVy(-3);
 		}
 		player.goUp();
 		
@@ -97,7 +101,7 @@ public class GameEngine {
 			player.setVy(0);
 			map.setY( GamePanel.HEIGHT - map.getHeight() );
 		} else {
-			player.setVy(2);
+			player.setVy(3);
 		}
 		player.goDown();
 		
@@ -109,7 +113,7 @@ public class GameEngine {
 			player.setVx(0);
 			map.setX(0);
 		} else {
-			player.setVx(-2);
+			player.setVx(-3);
 		}
 		player.turnLeft();
 		
@@ -121,7 +125,7 @@ public class GameEngine {
 			player.setVx(0);
 			map.setX( GamePanel.WIDTH - map.getWidth() );
 		} else {
-			player.setVx(2);
+			player.setVx(3);
 		}
 		player.turnRight();
 		
