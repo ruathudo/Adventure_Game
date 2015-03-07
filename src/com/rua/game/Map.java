@@ -14,7 +14,7 @@ public class Map {
 	private int[][] mapTiles;
 	public static final int TILE_SIZE = 32;
 	public static final int MAP_SIZEX  = 40;
-	public static final int MAP_SIZEY  = 30;
+	public static final int MAP_SIZEY  = 40;
 	private HashMap<Integer,BufferedImage> tileImages;
 	private int x, y;  // Map position
 	
@@ -57,10 +57,12 @@ public class Map {
 			BufferedImage background = ImageIO.read(new File("Assets/Sprites/background.jpg"));
 			BufferedImage wall = ImageIO.read(new File("Assets/Sprites/wall.png"));
 			BufferedImage tile = ImageIO.read(new File("Assets/Sprites/tile.jpg"));
+			BufferedImage flashlight = ImageIO.read(new File("Assets/Sprites/flashlight.jpg"));
 			
 			this.tileImages.put(0, background);
 			this.tileImages.put(1, wall);
 			this.tileImages.put(2, tile);
+			this.tileImages.put(4, flashlight);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -75,6 +77,10 @@ public class Map {
 	
 	public int getWidth(){ return MAP_SIZEX*TILE_SIZE; }
 	public int getHeight(){ return MAP_SIZEY*TILE_SIZE; }
+	 
+	public int[][] getMapTiles() {
+		return mapTiles;
+	}
 	///////////////////////////////////////////////////
 	
 	public void draw(Graphics g) {
@@ -85,10 +91,6 @@ public class Map {
 			}
 		}
 	}
-	
-	public int[][] getMapTiles() {
-		return mapTiles;
-	}
-	
+		
 	
 }
