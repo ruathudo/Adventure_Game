@@ -3,17 +3,21 @@ package com.rua.game;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class GameEngine {
 	private Map map;
 	private Player player;
-	private ArrayList<Thing> collection;
+	private ArrayList<Thing> collection;  // contain Thing objects
+	private HashMap<String, Key> keys;  // contain keys to access the rooms
 	
 	public GameEngine() {
 		map = new Map();
 		player = new Player();
 		collection = new ArrayList<Thing>();
+		keys = new HashMap<String,Key>();
+		keys.put("#Room1", new Key("#Room1")); // Generate key for first room
 	}
 	
 	public void draw(Graphics g) {
@@ -36,31 +40,56 @@ public class GameEngine {
 		// check collision
 		int[] collision = collision();
 		
-		if( (player.isRight() || player.isLeft()) && collision[0] == Map.WALL )  // if is wall => stop
-			player.setVx(0);
+		/*************  Wall collision  **********************/
+		if( collision[0] == Map.WALL )  // if is wall => stop
+			player.stop();
 		
-		if( (player.isUp() || player.isDown()) && collision[0] == Map.WALL )
-			player.setVy(0);
-		
-		
-		//if( collision == 3 )  // if is water => die
+		/************** Water Collision ***********************/
+		if( collision[0] == Map.WATER ) 
+			player.stop();
+
+		/************** Room Collision ***********************/
 		if( collision[0] == Map.TILE ) {
 			Room currentRoom = map.getRoom(collision[1], collision[2]); // check room
-			if( currentRoom != null)
-			System.out.println(currentRoom.getName());
+			if( currentRoom != null){ 
+				String roomName = currentRoom.getName();
+				if( this.keys.containsKey(roomName) == false ) { // if don't have key to access
+					player.stop();
+				}
+			}
+			
 		}
 		
+		/************** Key Collision ***********************/
+		if( collision[0] == Map.KEY ) {
+			Room currentRoom = map.getRoom(collision[1], collision[2]); // check room
+			if( currentRoom != null){
+				int roomNum = Integer.parseInt(currentRoom.getName().substring(5));
+				String roomName = "#Room" + (roomNum + 1);  // Generate room name for new key
+				
+				if(this.keys.containsKey(roomName) == false) // if haven't contained key for next room
+					this.keys.put(roomName, new Key(roomName));  // create new obj key then put to keys map
+				
+				map.setMapTile(collision[1], collision[2], Map.TILE);  // change key to TILE image
+			}
+		}
+		
+		/************** Flashlight Collision ***********************/
 		if( collision[0] == Map.FLASHLIGHT ) {
 			this.collection.add(new Flashlight("Flashlight"));  // add new flashlight object to collection
 			map.setMapTile(collision[1], collision[2], Map.TILE);  // change flashlight to TILE image
 		}
+		
+		
+			
+
 	}
 	
 	
 	
 	/*
 	 * Handle the collision between player and other objects 
-	 * return array tileKey, tileX, tileY in Map tiles array
+	 * return array(tileKey, tileY, tileX) in Map tiles array
 	 */
 	private int[] collision() {
 		int[][] mapTiles = map.getMapTiles();
