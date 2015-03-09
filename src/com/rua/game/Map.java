@@ -12,7 +12,6 @@ import java.util.Scanner;
 import javax.imageio.ImageIO;
 
 public class Map {
-	private int[][] mapTiles;
 	public static final int TILE_SIZE = 32;
 	public static final int MAP_SIZEX  = 40; // tile numbers
 	public static final int MAP_SIZEY  = 40;
@@ -26,7 +25,7 @@ public class Map {
 	public static final int BATTERY = 22;
 	
 	
-
+	private int[][] mapTiles;
 	private HashMap<Integer,BufferedImage> tileImages;
 	private ArrayList<Room> rooms;
 	private int x, y;  // Map position

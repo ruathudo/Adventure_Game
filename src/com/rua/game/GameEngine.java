@@ -9,6 +9,7 @@ import java.util.HashMap;
 public class GameEngine {
 	private Map map;
 	private Player player;
+	private Flashlight flashlight;
 	private ArrayList<Thing> collection;  // contain Thing objects
 	private HashMap<String, Key> keys;  // contain keys to access the rooms
 	
@@ -33,7 +34,7 @@ public class GameEngine {
 	
 	
 	/*
-	 * All the logic and game play action in here
+	 * All the logic and game play action in  here
 	 */
 
 	public void gameLogic() {
@@ -43,11 +44,11 @@ public class GameEngine {
 		/*************  Wall collision  **********************/
 		if( collision[0] == Map.WALL )  // if is wall => stop
 			player.stop();
-		
+		else
 		/************** Water Collision ***********************/
 		if( collision[0] == Map.WATER ) 
 			player.stop();
-
+		else
 		/************** Room Collision ***********************/
 		if( collision[0] == Map.TILE ) {
 			Room currentRoom = map.getRoom(collision[1], collision[2]); // check room
@@ -57,9 +58,8 @@ public class GameEngine {
 					player.stop();
 				}
 			}
-			
 		}
-		
+		else
 		/************** Key Collision ***********************/
 		if( collision[0] == Map.KEY ) {
 			Room currentRoom = map.getRoom(collision[1], collision[2]); // check room
@@ -73,10 +73,11 @@ public class GameEngine {
 				map.setMapTile(collision[1], collision[2], Map.TILE);  // change key to TILE image
 			}
 		}
-		
+		else
 		/************** Flashlight Collision ***********************/
 		if( collision[0] == Map.FLASHLIGHT ) {
-			this.collection.add(new Flashlight("Flashlight"));  // add new flashlight object to collection
+			this.flashlight = new Flashlight("Flashlight");
+			this.collection.add(flashlight);  // add new flashlight object to collection
 			map.setMapTile(collision[1], collision[2], Map.TILE);  // change flashlight to TILE image
 		}
 		
