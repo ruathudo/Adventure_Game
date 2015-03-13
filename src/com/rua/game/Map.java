@@ -20,6 +20,7 @@ public class Map {
 	public static final int WALL = 11;
 	public static final int TILE = 12;
 	public static final int WATER = 13;
+	public static final int TREE = 14;
 	public static final int KEY = 20;
 	public static final int FLASHLIGHT = 21;
 	public static final int BATTERY = 22;
@@ -93,13 +94,14 @@ public class Map {
 			BufferedImage water = ImageIO.read(new File("Assets/Sprites/water.gif"));
 			BufferedImage key = ImageIO.read(new File("Assets/Sprites/key.jpg"));
 			BufferedImage flashlight = ImageIO.read(new File("Assets/Sprites/flashlight.jpg"));
+			BufferedImage tree = ImageIO.read(new File("Assets/Sprites/tree.jpg"));
 			
 			//map start from 10
 			this.tileImages.put(GROUND, ground);
 			this.tileImages.put(WALL, wall);
 			this.tileImages.put(TILE, tile);
 			this.tileImages.put(WATER, water);
-			
+			this.tileImages.put(TREE, tree);
 			//stuff start from 10
 			this.tileImages.put(KEY, key);
 			this.tileImages.put(FLASHLIGHT, flashlight);

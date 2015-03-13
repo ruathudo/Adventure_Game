@@ -13,22 +13,24 @@ import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements ActionListener, KeyListener{
-	Timer tm = new Timer(5, this); // Timer for Action Listener interval
-	
 	// Window dimension 
 	public static final int WIDTH = 320;  
 	public static final int HEIGHT = 320;  
 
-	private GameEngine game = new GameEngine();
-	
+	private GameEngine game;
+	private Timer tm = new Timer(30, this); // Timer for Action Listener interval
+
 		
 	public GamePanel() {
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true);
 		requestFocus();
 		setBackground(Color.BLACK);
+		
+		game = new GameEngine();
 		tm.start(); 
 		loopStart();
+		
 		addKeyListener(this);  // Add key listener to this GamePanel
 	}
 	
@@ -86,32 +88,30 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 
-		if (keyCode == KeyEvent.VK_UP) {
+		if (keyCode == KeyEvent.VK_UP)
 			game.keyUp(); 
-		}
 
-		if (keyCode == KeyEvent.VK_DOWN) {
+		if (keyCode == KeyEvent.VK_DOWN)
 			game.keyDown(); 
-			
-		}
-		if (keyCode == KeyEvent.VK_LEFT) {
-			game.keyLeft(); 
-		}
 
-		if (keyCode == KeyEvent.VK_RIGHT) {
+		if (keyCode == KeyEvent.VK_LEFT)
+			game.keyLeft(); 
+
+		if (keyCode == KeyEvent.VK_RIGHT)
 			game.keyRight();
-		}
+		
+		if (keyCode == KeyEvent.VK_SPACE)
+			game.keySpace();
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		game.keyRelease();  // stop player when key realeased
+		int keyCode = e.getKeyCode();
+		if(keyCode != KeyEvent.VK_SPACE)
+			game.keyRelease();  // stop player when key realeased	
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyTyped(KeyEvent e) {}
 
 }

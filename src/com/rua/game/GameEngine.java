@@ -12,6 +12,7 @@ public class GameEngine {
 	private Flashlight flashlight;
 	private ArrayList<Thing> collection;  // contain Thing objects
 	private HashMap<String, Key> keys;  // contain keys to access the rooms
+	private Battery battery;
 	
 	public GameEngine() {
 		map = new Map();
@@ -19,6 +20,7 @@ public class GameEngine {
 		collection = new ArrayList<Thing>();
 		keys = new HashMap<String,Key>();
 		keys.put("#Room1", new Key("#Room1")); // Generate key for first room
+		battery = new Battery();
 	}
 	
 	public void draw(Graphics g) {
@@ -27,24 +29,27 @@ public class GameEngine {
 	}
 	
 	public void update() {
-		gameLogic();
+		checkCollision();
 		map.setX( map.getX() - player.getVx() );  // update new Map x, y
 		map.setY( map.getY() - player.getVy() );
 	}
 	
 	
 	/*
-	 * All the logic and game play action in  here
+	 * check collision and make the action
 	 */
 
-	public void gameLogic() {
+	public void checkCollision() {
 		// check collision
-		int[] collision = collision();
+		int[] collision = this.collision();
 		
 		/*************  Wall collision  **********************/
 		if( collision[0] == Map.WALL )  // if is wall => stop
 			player.stop();
 		else
+		/*************  Tree collision  **********************/	
+		if( collision[0] == Map.TREE )    
+			player.stop();
 		/************** Water Collision ***********************/
 		if( collision[0] == Map.WATER ) 
 			player.stop();
@@ -81,9 +86,6 @@ public class GameEngine {
 			map.setMapTile(collision[1], collision[2], Map.TILE);  // change flashlight to TILE image
 		}
 		
-		
-			
-
 	}
 	
 	
@@ -125,6 +127,14 @@ public class GameEngine {
 	
 	
 	/*
+	 * Game listen, get all the event from object and process
+	 */
+	
+	public void listen() {
+		
+	}
+	
+	/*
 	 * KeyEvent. Get key events to Key Listener
 	 */
 
@@ -150,6 +160,21 @@ public class GameEngine {
 
 	public void keyRelease() {
 		player.stop();
+	}
+	
+	public void keySpace() { 
+		if( flashlight != null ) {
+			if ( flashlight.isOn() ) {
+				flashlight.turnOff();
+				player.changePlayer(false); // change player image without flashlight
+				battery.consume(false); 
+			} else { 
+				flashlight.turnOn();
+				player.changePlayer(true); // change player image with flashlight
+				System.out.println("flashOn");
+				battery.consume(true); 
+			}
+		}
 	}
 
 }

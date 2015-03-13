@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -16,16 +17,20 @@ public class Player {
 	private boolean left;
 	private boolean right;
 	private BufferedImage player;
-
+	private ArrayList<BufferedImage> playerAssets = new ArrayList<BufferedImage>();
 	
 	public Player() {
 		try {
 			// get the player image source
-			this.player = ImageIO.read(new File("Assets/Sprites/player.png"));
+			BufferedImage playerDefault = ImageIO.read(new File("Assets/Sprites/player.png"));
+			BufferedImage playerFlash = ImageIO.read(new File("Assets/Sprites/player_2.png")); 
+			playerAssets.add(playerDefault);
+			playerAssets.add(playerFlash);
+			
+			this.player = playerDefault;
 			// make the player stand in the center of window
 			this.x = (GamePanel.WIDTH - player.getWidth()) / 2; 
 			this.y = (GamePanel.HEIGHT - player.getHeight()) / 2;
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -40,6 +45,14 @@ public class Player {
 
 	public BufferedImage getImage() {
 		return this.player;
+	}
+	
+	// change player image when have flash in hand
+	public void changePlayer(boolean hasFlash){
+		if( hasFlash )
+			this.player = playerAssets.get(1);
+		else 
+			this.player = playerAssets.get(0);
 	}
 	
 	// Get and set moving information
