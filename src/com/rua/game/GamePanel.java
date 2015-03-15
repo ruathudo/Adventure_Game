@@ -120,6 +120,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		
 		if (keyCode == KeyEvent.VK_SPACE)
 			game.keySpace();
+		
 	}
 
 	@Override

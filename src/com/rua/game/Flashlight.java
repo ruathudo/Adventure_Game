@@ -3,8 +3,8 @@ package com.rua.game;
 public class Flashlight extends Thing {
 	private boolean onState;  // on = true, off = false
 
-	public Flashlight(String n) {
-		super(n);
+	public Flashlight() {
+		super("Flashlight");
 		onState = false;
 	}
 	

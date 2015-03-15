@@ -26,7 +26,14 @@ public class Map {
 	public static final int KEY = 20;
 	public static final int FLASHLIGHT = 21;
 	public static final int BATTERY = 22;
-	
+	public static final int CLOCK = 23;
+	public static final int LIFEBUOY = 24;
+	public static final int HOTDOG = 25;
+	public static final int MOBILE = 26;
+	public static final int MONEY = 27;
+	public static final int BOMB = 28;
+	public static final int FLAG = 29;
+
 	
 	private int[][] mapTiles;
 	private HashMap<Integer,BufferedImage> tileImages;
@@ -101,7 +108,15 @@ public class Map {
 			BufferedImage key = ImageIO.read(new File("Assets/Sprites/key.jpg"));
 			BufferedImage flashlight = ImageIO.read(new File("Assets/Sprites/flashlight.jpg"));
 			BufferedImage tree = ImageIO.read(new File("Assets/Sprites/tree.jpg"));
-			
+			BufferedImage battery = ImageIO.read(new File("Assets/Sprites/battery.jpg"));
+			BufferedImage clock = ImageIO.read(new File("Assets/Sprites/clock.jpg"));
+			BufferedImage lifebuoy = ImageIO.read(new File("Assets/Sprites/lifebuoy.jpg"));
+			BufferedImage hotdog = ImageIO.read(new File("Assets/Sprites/hotdog.jpg"));
+			BufferedImage mobile = ImageIO.read(new File("Assets/Sprites/mobile.jpg"));
+			BufferedImage money = ImageIO.read(new File("Assets/Sprites/money.jpg"));
+			BufferedImage bomb = ImageIO.read(new File("Assets/Sprites/bomb.jpg"));
+			BufferedImage flag = ImageIO.read(new File("Assets/Sprites/flag.jpg"));
+
 			//map start from 10
 			this.tileImages.put(GROUND, ground);
 			this.tileImages.put(WALL, wall);
@@ -109,9 +124,19 @@ public class Map {
 			this.tileImages.put(WATER, water);
 			this.tileImages.put(TREE, tree);
 			this.tileImages.put(TREE_HIDE, ground);
+			
 			//stuff start from 10
 			this.tileImages.put(KEY, key);
 			this.tileImages.put(FLASHLIGHT, flashlight);
+			this.tileImages.put(BATTERY, battery);
+			this.tileImages.put(CLOCK, clock);
+			this.tileImages.put(LIFEBUOY, lifebuoy);
+			this.tileImages.put(HOTDOG, hotdog);
+			this.tileImages.put(MOBILE, mobile);
+			this.tileImages.put(MONEY, money);
+			this.tileImages.put(BOMB, bomb);
+			this.tileImages.put(FLAG, flag);
+			
 			
 		} catch (IOException e) {
 			e.printStackTrace();

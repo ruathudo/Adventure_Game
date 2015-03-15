@@ -7,10 +7,13 @@ import java.util.HashMap;
 
 
 public class GameEngine {
+	public static final int COLLECTION = 25; // number of stuff in collection to win
+	
 	private Map map;
 	private Player player;
 	private InfoBar infoBar;
 	private Flashlight flashlight;
+	private Lifebuoy lifebuoy;
 	private ArrayList<Thing> collection;  // contain Thing objects
 	private HashMap<String, Key> keys;  // contain keys to access the rooms
 	private Battery battery;
@@ -46,6 +49,12 @@ public class GameEngine {
 		// check collision
 		int[] collision = this.collision();
 		
+		/*************  Ground collision  **********************/	
+		if( collision[0] == Map.GROUND) {
+			if(lifebuoy != null && lifebuoy.isUsing() && !lifebuoy.isUsed())
+				lifebuoy.setUsed();  // set lifeboy is used if it from water to ground
+		}		
+		else
 		/*************  Wall collision  **********************/
 		if( collision[0] == Map.WALL )  // if is wall => stop
 			player.stop();
@@ -53,12 +62,17 @@ public class GameEngine {
 		/*************  Tree collision  **********************/	
 		if( collision[0] == Map.TREE || collision[0] == Map.TREE_HIDE)    
 			player.stop();
+		else
 		/************** Water Collision ***********************/
-		if( collision[0] == Map.WATER ) 
-			player.stop();
+		if( collision[0] == Map.WATER ) { 
+			if(lifebuoy != null && !lifebuoy.isUsed() ) 
+				lifebuoy.setUsing(); // set lifeboy is using if it from ground to water and new
+			else 
+				player.stop();
+		}
 		else
 		/************** Room Collision ***********************/
-		if( collision[0] == Map.TILE ) {
+		if( collision[0] == Map.TILE ) { 
 			Room currentRoom = map.getRoom(collision[1], collision[2]); // check room
 			if( currentRoom != null){ 
 				String roomName = currentRoom.getName();
@@ -75,22 +89,62 @@ public class GameEngine {
 				int roomNum = Integer.parseInt(currentRoom.getName().substring(5));
 				String roomName = "#Room" + (roomNum + 1);  // Generate room name for new key
 				
-				if(this.keys.containsKey(roomName) == false) { // if haven't contained key for next room
-					this.keys.put(roomName, new Key(roomName));  // create new obj key then put to keys map
-					infoBar.addKey();
-				}
+				this.keys.put(roomName, new Key(roomName));  // create new obj key then put to keys map
+				infoBar.addKey();
+				infoBar.addStuff();
 				map.setMapTile(collision[1], collision[2], Map.TILE);  // change key to TILE image
 			}
 		}
 		else
 		/************** Flashlight Collision ***********************/
 		if( collision[0] == Map.FLASHLIGHT ) {
-			this.flashlight = new Flashlight("Flashlight");
+			this.flashlight = new Flashlight();
 			this.collection.add(flashlight);  // add new flashlight object to collection
 			map.setMapTile(collision[1], collision[2], Map.TILE);  // change flashlight to TILE image
 			infoBar.addStuff();
+			infoBar.message("Press SPACE to use Flashlight!"); 
 		}
-		
+		else
+		/************** Battery Collision ***********************/
+		if( collision[0] == Map.BATTERY ) {
+			this.battery.charge(10);
+			this.collection.add(new Thing("Battery"));
+			infoBar.addStuff();
+			map.setMapTile(collision[1], collision[2], Map.TILE);  // change flashlight to Ground image
+		}
+		else
+		/************** Clock Collision ***********************/
+		if( collision[0] == Map.CLOCK ) {
+			this.collection.add(new Thing("Clock"));
+			infoBar.addStuff();
+			infoBar.setTime(30); // plus 30s for time
+			infoBar.message("Plus time before explosion!"); // minus -10s for time
+			map.setMapTile(collision[1], collision[2], Map.TILE);  // change flashlight to Ground image
+		}
+		else
+		/************** Lifebuoy Collision ***********************/
+		if( collision[0] == Map.LIFEBUOY ) {
+			this.lifebuoy = new Lifebuoy();
+			this.collection.add(lifebuoy);
+			infoBar.addStuff();
+			infoBar.message("Use lifebuoy to swim, onetime only!"); 
+			map.setMapTile(collision[1], collision[2], Map.TILE);  // change flashlight to Ground image
+		}	
+		else
+		/************** Bomb Collision ***********************/
+		if( collision[0] == Map.BOMB ) {
+			this.collection.add(new Thing("Bomb"));
+			infoBar.addStuff();
+			infoBar.message("Cheer! You have removed a bomb!"); 
+			map.setMapTile(collision[1], collision[2], Map.TILE);  // change flashlight to Ground image
+		}	
+		/************** Others Collision ***********************/
+		else 
+		if( collision[0] != 0 ){
+			this.collection.add(new Thing("Stuff"));
+			infoBar.addStuff();
+			map.setMapTile(collision[1], collision[2], Map.GROUND);  // change flashlight to Ground image
+		}
 		
 	}
 	
@@ -110,20 +164,25 @@ public class GameEngine {
 			tileX = ( GamePanel.WIDTH/2 - map.getX() + playerTile.getWidth()/2 )/Map.TILE_SIZE;
 			tileY = ( GamePanel.HEIGHT/2 - map.getY() )/Map.TILE_SIZE;
 		}
-		
+		else
 		if( player.isLeft() ) { // if is going to left
 			tileX = ( GamePanel.WIDTH/2 - map.getX() - playerTile.getWidth()/2 )/Map.TILE_SIZE;
 			tileY = ( GamePanel.HEIGHT/2 - map.getY() )/Map.TILE_SIZE;
 		}
-		
+		else
 		if( player.isUp() ) { // if is going to right
 			tileX = ( GamePanel.WIDTH/2 - map.getX()  )/Map.TILE_SIZE;
 			tileY = ( GamePanel.HEIGHT/2 - map.getY() - playerTile.getHeight()/2 )/Map.TILE_SIZE;
 		}
-		
+		else
 		if( player.isDown() ) { // if is going to right
 			tileX = ( GamePanel.WIDTH/2 - map.getX() )/Map.TILE_SIZE;
 			tileY = ( GamePanel.HEIGHT/2 - map.getY() + playerTile.getHeight()/2 )/Map.TILE_SIZE;
+		}
+		else {
+			int tileKey = 0;
+			int[] tilePos = {tileKey, tileY, tileX};
+			return tilePos;
 		}
 		
 		int tileKey = mapTiles[tileY][tileX];
@@ -137,11 +196,18 @@ public class GameEngine {
 	 */
 	
 	public void listen() {
-		if( collection.size() == 1 ) {
-			System.out.println(collection.size());
-		}
+		if( collection.size() == COLLECTION ) // if collect enough stuffs
+			System.out.println("Win!!");
+		
+		if( battery.checkConsume() )   // listen for battery if is consuming
+			infoBar.setBattery( battery.getLevel() );
+		
+		infoBar.setTime(-1);
 	}
 	
+	public void waterUp() {
+		int[][] mapTiles = map.getMapTiles();
+	}
 	/*
 	 * KeyEvent. Get key events to Key Listener
 	 */

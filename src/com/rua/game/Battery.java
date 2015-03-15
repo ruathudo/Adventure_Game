@@ -4,10 +4,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class Battery {
+public class Battery extends Thing{
 	private int energy;
 	private boolean isConsume;
+	
 	public Battery() {
+		super("Battery");
 		energy = 100;
 		consume();
 	}
@@ -18,21 +20,16 @@ public class Battery {
 		    @Override
 		    public void run() {
 		    	if( isConsume ) 
-		    		energy--;
-		        System.out.println(energy);
+		    		energy -= 2;
 		    }
-		}, 10, 2000);//Set the amount of time between each execution (in milliseconds)
+		}, 10, 3000);//Set the amount of time between each execution (in milliseconds)
 	}
 	
-	public int getLevel() {
-		return energy;
-	}
+	public int getLevel() { return energy; }
 	
-	public void charge(int c) {
-		energy += c;
-	}
+	public void charge(int c) { energy += c; }
 
-	public void setConsume(boolean b) {
-		isConsume = b;
-	}
+	public boolean checkConsume() { return isConsume; }
+	
+	public void setConsume(boolean b) { isConsume = b; }
 }
