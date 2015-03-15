@@ -16,8 +16,8 @@ public class InfoBar {
 		stuffNum = 0;
 		battery = 100;
 		key = 1;
-		time = 500;
-		message = "";
+		time = 200;
+		message = "dcmmm vkll";
 	}
 	
 	public void draw(Graphics g) {
@@ -28,7 +28,7 @@ public class InfoBar {
 	    g.drawString("Battery: "+ battery + "%", 220, 318);
 	    g.drawString("Time: "+ time + "s", 240, 12);
 	    g.drawString("Next Room: "+ key + "/5", 5, 12);
-	    g.drawString(message, 30, 250);
+	    g.drawString(message, GamePanel.WIDTH/2, 250);
 	}
 	
 	public void addKey() {
@@ -38,6 +38,7 @@ public class InfoBar {
 	public void setBattery(int n) { battery = n;}
 	public void addStuff() { stuffNum++; }
 	public void setTime(int n) { time += n; }
+	public int getTime() { return time; }
 	
 	public void message(String s) {
 		message = s;

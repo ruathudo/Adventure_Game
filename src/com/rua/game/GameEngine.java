@@ -202,7 +202,10 @@ public class GameEngine {
 		if( battery.checkConsume() )   // listen for battery if is consuming
 			infoBar.setBattery( battery.getLevel() );
 		
-		infoBar.setTime(-1);
+		if( infoBar.getTime() > 0)
+			infoBar.setTime(-1);
+		else
+			System.out.println("Loose!!");
 	}
 	
 	public void waterUp() {
