@@ -21,6 +21,8 @@ public class Map {
 	public static final int TILE = 12;
 	public static final int WATER = 13;
 	public static final int TREE = 14;
+	public static final int TREE_HIDE = 15;
+
 	public static final int KEY = 20;
 	public static final int FLASHLIGHT = 21;
 	public static final int BATTERY = 22;
@@ -29,12 +31,14 @@ public class Map {
 	private int[][] mapTiles;
 	private HashMap<Integer,BufferedImage> tileImages;
 	private ArrayList<Room> rooms;
+	private ArrayList<int[]> trees;
 	private int x, y;  // Map position
 	
 	public Map() {
 		this.x = - (MAP_SIZEX * TILE_SIZE - GamePanel.WIDTH)/2;
 		this.y = - (MAP_SIZEY * TILE_SIZE - GamePanel.HEIGHT)/2;
 		this.rooms = new ArrayList<Room>(); // create rooms map
+		this.trees = new ArrayList<int[]>(); // create arraylist for tree positon array(row,col)
 		createMap();
 		loadImage();
 	}
@@ -53,6 +57,8 @@ public class Map {
 				tokens =  line.split(" ");
 				for(int col=0; col < MAP_SIZEX; col++ ) {
 					this.mapTiles[row][col] = Integer.parseInt(tokens[col]);
+					if( mapTiles[row][col] == TREE_HIDE)
+						this.trees.add( new int[]{row,col} ); // add position of tree to trees list
 				}
 				
 			}
@@ -102,6 +108,7 @@ public class Map {
 			this.tileImages.put(TILE, tile);
 			this.tileImages.put(WATER, water);
 			this.tileImages.put(TREE, tree);
+			this.tileImages.put(TREE_HIDE, ground);
 			//stuff start from 10
 			this.tileImages.put(KEY, key);
 			this.tileImages.put(FLASHLIGHT, flashlight);
@@ -137,6 +144,19 @@ public class Map {
 		}
 	}
 	
+
+	// show tree, assign tree image to maptile
+	public void showTrees() {
+		for(int[] tree : trees) {
+			setMapTile(tree[0], tree[1], TREE);
+		}
+	}
+	// hide tree, assign ground image to maptile
+	public void hideTrees() {
+		for(int[] tree : trees) {
+			setMapTile(tree[0], tree[1], TREE_HIDE);
+		}
+	}
 	/*
 	 * Get Room Return Room object
 	 */

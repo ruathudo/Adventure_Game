@@ -9,6 +9,7 @@ import java.util.HashMap;
 public class GameEngine {
 	private Map map;
 	private Player player;
+	private InfoBar infoBar;
 	private Flashlight flashlight;
 	private ArrayList<Thing> collection;  // contain Thing objects
 	private HashMap<String, Key> keys;  // contain keys to access the rooms
@@ -21,11 +22,13 @@ public class GameEngine {
 		keys = new HashMap<String,Key>();
 		keys.put("#Room1", new Key("#Room1")); // Generate key for first room
 		battery = new Battery();
+		infoBar = new InfoBar(); // Game information Bar
 	}
 	
 	public void draw(Graphics g) {
 		map.draw(g);
 		player.draw(g);
+		infoBar.draw(g);
 	}
 	
 	public void update() {
@@ -48,7 +51,7 @@ public class GameEngine {
 			player.stop();
 		else
 		/*************  Tree collision  **********************/	
-		if( collision[0] == Map.TREE )    
+		if( collision[0] == Map.TREE || collision[0] == Map.TREE_HIDE)    
 			player.stop();
 		/************** Water Collision ***********************/
 		if( collision[0] == Map.WATER ) 
@@ -72,9 +75,10 @@ public class GameEngine {
 				int roomNum = Integer.parseInt(currentRoom.getName().substring(5));
 				String roomName = "#Room" + (roomNum + 1);  // Generate room name for new key
 				
-				if(this.keys.containsKey(roomName) == false) // if haven't contained key for next room
+				if(this.keys.containsKey(roomName) == false) { // if haven't contained key for next room
 					this.keys.put(roomName, new Key(roomName));  // create new obj key then put to keys map
-				
+					infoBar.addKey();
+				}
 				map.setMapTile(collision[1], collision[2], Map.TILE);  // change key to TILE image
 			}
 		}
@@ -84,7 +88,9 @@ public class GameEngine {
 			this.flashlight = new Flashlight("Flashlight");
 			this.collection.add(flashlight);  // add new flashlight object to collection
 			map.setMapTile(collision[1], collision[2], Map.TILE);  // change flashlight to TILE image
+			infoBar.addStuff();
 		}
+		
 		
 	}
 	
@@ -131,7 +137,9 @@ public class GameEngine {
 	 */
 	
 	public void listen() {
-		
+		if( collection.size() == 1 ) {
+			System.out.println(collection.size());
+		}
 	}
 	
 	/*
@@ -166,13 +174,14 @@ public class GameEngine {
 		if( flashlight != null ) {
 			if ( flashlight.isOn() ) {
 				flashlight.turnOff();
+				battery.setConsume(false);
 				player.changePlayer(false); // change player image without flashlight
-				battery.consume(false); 
+				map.hideTrees();
 			} else { 
 				flashlight.turnOn();
+				battery.setConsume(true); 
 				player.changePlayer(true); // change player image with flashlight
-				System.out.println("flashOn");
-				battery.consume(true); 
+				map.showTrees();
 			}
 		}
 	}

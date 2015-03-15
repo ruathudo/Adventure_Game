@@ -6,23 +6,22 @@ import java.util.TimerTask;
 
 public class Battery {
 	private int energy;
-	private Timer t = new Timer();
+	private boolean isConsume;
 	public Battery() {
 		energy = 100;
+		consume();
 	}
 
-	public void consume(boolean isConsume) {
-		if(isConsume) {
-			t.scheduleAtFixedRate(new TimerTask() {
-			    @Override
-			    public void run() {
-			        energy--;
-			    }
-			}, 0, 2000);//Set the amount of time between each execution (in milliseconds)
-		} else {
-			t.cancel(); // cancel the consuming 
-		}
-
+	public void consume() {
+		Timer t = new Timer();
+		t.scheduleAtFixedRate(new TimerTask() {
+		    @Override
+		    public void run() {
+		    	if( isConsume ) 
+		    		energy--;
+		        System.out.println(energy);
+		    }
+		}, 10, 2000);//Set the amount of time between each execution (in milliseconds)
 	}
 	
 	public int getLevel() {
@@ -31,5 +30,9 @@ public class Battery {
 	
 	public void charge(int c) {
 		energy += c;
+	}
+
+	public void setConsume(boolean b) {
+		isConsume = b;
 	}
 }

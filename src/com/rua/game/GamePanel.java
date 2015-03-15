@@ -41,7 +41,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	public void loopStart () {
 		System.out.println("Starting ");
 		
-		// Thread for player
+		// Thread for game loop
 		Thread gameLoop = new Thread ( new Runnable() {
 			public void run() {
 	
@@ -58,6 +58,24 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		});
 		
 		gameLoop.start();
+		
+		// Thread for game listener
+		Thread gameListener = new Thread ( new Runnable() {
+			public void run() {
+	
+				while(true) {
+					game.listen(); // 
+					try {
+						Thread.sleep(1000); // listen every second
+					}
+					catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		
+		gameListener.start();
 	}
 	
 	
