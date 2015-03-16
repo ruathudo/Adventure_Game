@@ -22,13 +22,13 @@ public class InfoBar {
 	
 	public void draw(Graphics g) {
 		int fontSize = 14;
-	    g.setFont(new Font("Serif", Font.BOLD, fontSize));
+	    g.setFont(new Font("Arial", Font.BOLD, fontSize));
 	    g.setColor(Color.WHITE);
 	    g.drawString("Collected: "+ stuffNum + "/" + GameEngine.COLLECTION, 5, 318);
 	    g.drawString("Battery: "+ battery + "%", 220, 318);
 	    g.drawString("Time: "+ time + "s", 240, 12);
 	    g.drawString("Next Room: "+ key + "/5", 5, 12);
-	    g.drawString(message, GamePanel.WIDTH/2, 250);
+	    g.drawString(message, 30, 250);
 	}
 	
 	public void addKey() {

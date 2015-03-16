@@ -18,7 +18,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	public static final int HEIGHT = 320;  
 
 	private GameEngine game;
+	private Menu menu;
 	private Timer tm = new Timer(30, this); // Timer for Action Listener interval
+	private boolean playing = false;
 
 		
 	public GamePanel() {
@@ -27,9 +29,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		requestFocus();
 		setBackground(Color.BLACK);
 		
-		game = new GameEngine();
+		menu = new Menu();
+		//game = new GameEngine();
 		tm.start(); 
-		loopStart();
+		//loopStart();
 		
 		addKeyListener(this);  // Add key listener to this GamePanel
 	}
@@ -86,8 +89,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		// draw player
-		game.draw(g);
+		// draw menu
+		if( playing )
+			game.draw(g);
+		else
+			menu.draw(g);
+		//game.draw(g);
 	}
 
 	/*
@@ -105,19 +112,25 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
-
+		
+		if (keyCode == KeyEvent.VK_1 && !playing) {
+			game = new GameEngine();
+			loopStart();
+			playing = true;
+		}
+		else
 		if (keyCode == KeyEvent.VK_UP)
 			game.keyUp(); 
-
+		else
 		if (keyCode == KeyEvent.VK_DOWN)
 			game.keyDown(); 
-
+		else
 		if (keyCode == KeyEvent.VK_LEFT)
 			game.keyLeft(); 
-
+		else
 		if (keyCode == KeyEvent.VK_RIGHT)
 			game.keyRight();
-		
+		else
 		if (keyCode == KeyEvent.VK_SPACE)
 			game.keySpace();
 		
@@ -126,7 +139,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int keyCode = e.getKeyCode();
-		if(keyCode != KeyEvent.VK_SPACE)
+		if(keyCode != KeyEvent.VK_SPACE && playing)
 			game.keyRelease();  // stop player when key realeased	
 	}
 
