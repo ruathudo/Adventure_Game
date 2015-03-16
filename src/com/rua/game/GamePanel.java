@@ -91,7 +91,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 				while(step != -1) {
 					step = game.waterUp(step); // recursion, step will return from function then become parameter
 					try {
-						Thread.sleep(1000); // listen every 3 second
+						Thread.sleep(4000); // listen every 3 second
 					}
 					catch(Exception e) {
 						e.printStackTrace();

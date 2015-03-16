@@ -252,13 +252,13 @@ public class GameEngine implements Serializable{
 	 */
 	public int waterUp(int n) {
 		int[][] mapTiles = map.getMapTiles();
-		int unfilledTiles = 0;
+		boolean filledTiles = true; // the tiles unfilled by water
 
 		int tilesPerTime = 3;
 		for(int i=0; i <= tilesPerTime; i++) { // loop through row
 			Random ran = new Random();
 			int x = ran.nextInt(Map.MAP_SIZEX - n) + n; // generate random number between n and max row or col
-			System.out.println(x);
+	
 			map.setMapTile(n, x, Map.WATER);  // set up row
 			map.setMapTile(x, n, Map.WATER);  // set left col
 			map.setMapTile(Map.MAP_SIZEX - n - 1, x, Map.WATER); // set bottom row
@@ -266,11 +266,11 @@ public class GameEngine implements Serializable{
 		}
 		
 		for(int j=n; j <  Map.MAP_SIZEX - n; j++) {
-			if( (mapTiles[n][j] != Map.WATER ) )
-				unfilledTiles++;
+			if( (mapTiles[n][j] != Map.WATER ) ) // if any tile still not filled
+				filledTiles = false;
 		}
 		
-		if( unfilledTiles == 0 )
+		if( filledTiles )
 			if ( n < Map.MAP_SIZEX )
 				n++;
 		
