@@ -40,7 +40,7 @@ public class InfoBar implements Serializable{
 	}
 	public void setBattery(int n) { battery = n;}
 	public void addStuff() { stuffNum++; }
-	public void setTime(int n) { time += n; }
+	public void setTime(int n) { time = n; }
 	
 	public void message(String s) {
 		message = s;

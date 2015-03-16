@@ -107,6 +107,7 @@ public class GameEngine implements Serializable{
 				String roomName = "#Room" + (roomNum + 1);  // Generate room name for new key
 				
 				this.keys.put(roomName, new Key(roomName));  // create new obj key then put to keys map
+				this.collection.add(new Key(roomName));
 				infoBar.addKey();
 				infoBar.addStuff();
 				map.setMapTile(collision[1], collision[2], Map.TILE);  // change key to TILE image
@@ -134,7 +135,8 @@ public class GameEngine implements Serializable{
 		if( collision[0] == Map.CLOCK ) {
 			this.collection.add(new Thing("Clock"));
 			infoBar.addStuff();
-			infoBar.setTime(30); // plus 30s for time
+			timePlay +=30;
+			infoBar.setTime(timePlay); // plus 30s for time
 			infoBar.message("Plus time before explosion!"); // minus -10s for time
 			map.setMapTile(collision[1], collision[2], Map.TILE);  // change flashlight to Ground image
 		}
@@ -213,20 +215,34 @@ public class GameEngine implements Serializable{
 	 */
 	
 	public void listen() {
-		if( collection.size() == COLLECTION ) // if collect enough stuffs
-			infoBar.message("Congratulation, You Win!!");
-		
-		if( battery.checkConsume() ) {  // listen for battery if is consuming
-			infoBar.setBattery( battery.getLevel() );
-			battery.consume(1);
-		}
-		
-		if( this.timePlay > 0){
-			this.timePlay--;   // minus timePlay every second
-			infoBar.setTime(-1);
+
+		if( collection.size() == COLLECTION ) {
+			battery.setConsume(false);
+			infoBar.message("Congratulation, You Win!!"); // if collect enough stuffs
 		}
 		else
-			infoBar.message("Game Over!");
+		if( this.timePlay > 0){
+			this.timePlay--;   // minus timePlay every second
+			infoBar.setTime(timePlay);
+		}
+		else {
+			infoBar.message("Time's Up. Game Over!");
+		}
+			
+		
+		if( battery.checkConsume() )  // listen for battery if is consuming
+			battery.consume(1);
+	
+		if (battery.getLevel() <= 0) {
+			if( battery.checkConsume() ) 
+				battery.setConsume(false);
+			flashlight.turnOff();
+			battery.setConsume(false);
+			player.changePlayer(false); // change player image without flashlight
+			map.hideTrees();
+		}
+		
+		infoBar.setBattery( battery.getLevel() );
 	}
 	
 	public void waterUp() {
@@ -267,7 +283,7 @@ public class GameEngine implements Serializable{
 				battery.setConsume(false);
 				player.changePlayer(false); // change player image without flashlight
 				map.hideTrees();
-			} else { 
+			} else if ( battery.getLevel() > 0) { 
 				flashlight.turnOn();
 				battery.setConsume(true); 
 				player.changePlayer(true); // change player image with flashlight
