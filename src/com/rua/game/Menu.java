@@ -16,5 +16,6 @@ public class Menu {
 		g.drawString(" 2 To SAVE", 100, 210);
 		g.drawString(" 3 To LOAD", 100, 240);
 		g.drawString(" 4 To HELP", 100, 270);
+		g.drawString(" ESC To BACK", 100, 300);
 	}
 }

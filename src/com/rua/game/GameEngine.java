@@ -214,7 +214,7 @@ public class GameEngine implements Serializable{
 	
 	public void listen() {
 		if( collection.size() == COLLECTION ) // if collect enough stuffs
-			System.out.println("Win!!");
+			infoBar.message("Congratulation, You Win!!");
 		
 		if( battery.checkConsume() ) {  // listen for battery if is consuming
 			infoBar.setBattery( battery.getLevel() );
@@ -226,7 +226,7 @@ public class GameEngine implements Serializable{
 			infoBar.setTime(-1);
 		}
 		else
-			System.out.println("Loose!!");
+			infoBar.message("Game Over!");
 	}
 	
 	public void waterUp() {

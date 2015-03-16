@@ -117,7 +117,24 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		
-			/********** Pause Game *************/
+		
+			/********** Game Play Control *************/
+		if (keyCode == KeyEvent.VK_UP)
+			game.keyUp(); 
+		else
+		if (keyCode == KeyEvent.VK_DOWN)
+			game.keyDown(); 
+		else
+		if (keyCode == KeyEvent.VK_LEFT)
+			game.keyLeft(); 
+		else
+		if (keyCode == KeyEvent.VK_RIGHT)
+			game.keyRight();
+		else
+		if (keyCode == KeyEvent.VK_SPACE)
+			game.keySpace();
+		else
+		/********** Pause Game *************/
 		if (keyCode == KeyEvent.VK_ESCAPE && playing) {
 			gameLoop.suspend();
 			gameListener.suspend();
@@ -125,7 +142,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		}
 		else
 			/********** Resume Game *************/
-		if (keyCode == KeyEvent.VK_ESCAPE && !playing) {
+		if (keyCode == KeyEvent.VK_ESCAPE && !playing && game != null) {
 			gameLoop.resume();
 			gameListener.resume();
 			playing = true;
@@ -139,7 +156,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		}
 		else
 			/********** Save Game *************/
-		if (keyCode == KeyEvent.VK_2 && !playing) {
+		if (keyCode == KeyEvent.VK_2 && !playing && game != null) {
 			try {
 		        FileOutputStream fileOut = new FileOutputStream("tmp/game.ser");
 		        ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -158,9 +175,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 				FileInputStream fileIn = new FileInputStream("tmp/game.ser");
 				ObjectInputStream in = new ObjectInputStream(fileIn);
 				game = (GameEngine) in.readObject();
-				game.load();
-				playing = true;
-				loopStart();
+				if(game != null) {  // resume the game
+					game.load();
+					playing = true;
+					loopStart();
+				}
+				
 				in.close();
 				fileIn.close();
 			}catch(IOException i) {
@@ -172,22 +192,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			     return;
 			}
 		}
-		else
-			/********** Game Play Control *************/
-		if (keyCode == KeyEvent.VK_UP)
-			game.keyUp(); 
-		else
-		if (keyCode == KeyEvent.VK_DOWN)
-			game.keyDown(); 
-		else
-		if (keyCode == KeyEvent.VK_LEFT)
-			game.keyLeft(); 
-		else
-		if (keyCode == KeyEvent.VK_RIGHT)
-			game.keyRight();
-		else
-		if (keyCode == KeyEvent.VK_SPACE)
-			game.keySpace();
 		
 	}
 
