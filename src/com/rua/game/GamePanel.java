@@ -134,7 +134,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		if (keyCode == KeyEvent.VK_SPACE)
 			game.keySpace();
 		else
-		/********** Pause Game *************/
+			/********** Pause Game *************/
 		if (keyCode == KeyEvent.VK_ESCAPE && playing) {
 			gameLoop.suspend();
 			gameListener.suspend();
@@ -149,14 +149,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		}
 		else
 			/********** Start New Game *************/
-		if (keyCode == KeyEvent.VK_1 && !playing) {
+		if ( (keyCode == KeyEvent.VK_1 || keyCode == KeyEvent.VK_NUMPAD1) && !playing) {
 			game = new GameEngine();
 			loopStart();
 			playing = true;
 		}
 		else
 			/********** Save Game *************/
-		if (keyCode == KeyEvent.VK_2 && !playing && game != null) {
+		if ( (keyCode == KeyEvent.VK_2 || keyCode == KeyEvent.VK_NUMPAD2) && !playing && game != null) {
 			try {
 		        FileOutputStream fileOut = new FileOutputStream("tmp/game.ser");
 		        ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -170,7 +170,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		}
 		else
 			/********** Load Game *************/
-		if (keyCode == KeyEvent.VK_3 && !playing) {
+		if ( (keyCode == KeyEvent.VK_3 || keyCode == KeyEvent.VK_NUMPAD3) && !playing) {
 			try {
 				FileInputStream fileIn = new FileInputStream("tmp/game.ser");
 				ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -192,7 +192,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			     return;
 			}
 		}
-		
+		else
+			/********** Open Help *************/
+		if ( (keyCode == KeyEvent.VK_4 || keyCode == KeyEvent.VK_NUMPAD4) && !playing) {
+			menu.setOpenHelp(true);
+		}
+		else
+		/********** exit help *************/
+		if (keyCode == KeyEvent.VK_ESCAPE && !playing)
+			menu.setOpenHelp(false);
+
 	}
 
 	@Override
