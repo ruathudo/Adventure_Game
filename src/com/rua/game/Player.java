@@ -19,9 +19,17 @@ public class Player implements Serializable{
 	private boolean left;
 	private boolean right;
 	private transient BufferedImage player;
-	private transient ArrayList<BufferedImage> playerAssets = new ArrayList<BufferedImage>();
+	private transient ArrayList<BufferedImage> playerAssets;
 	
 	public Player() {
+		load();
+	}
+	
+	/* 
+	 * Load Player assets
+	 */
+	public void load(){
+		playerAssets = new ArrayList<BufferedImage>();
 		try {
 			// get the player image source
 			BufferedImage playerDefault = ImageIO.read(new File("Assets/Sprites/player.png"));

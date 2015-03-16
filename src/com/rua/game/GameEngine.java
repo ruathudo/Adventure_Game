@@ -49,6 +49,14 @@ public class GameEngine implements Serializable{
 		map.setY( map.getY() - player.getVy() );
 	}
 	
+	/*
+	 * load unsaved object when saving
+	 * Typically is buffered image
+	 */
+	public void load() {
+		map.load();
+		player.load();
+	}
 	
 	/*
 	 * check collision and make the action

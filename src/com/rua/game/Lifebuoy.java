@@ -1,6 +1,9 @@
 package com.rua.game;
 
-public class Lifebuoy extends Thing{
+import java.io.Serializable;
+
+public class Lifebuoy extends Thing implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private boolean used; // how many times this be used
 	private boolean using;
 	public Lifebuoy() {

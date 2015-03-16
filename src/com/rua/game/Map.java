@@ -49,7 +49,7 @@ public class Map implements Serializable{
 		this.rooms = new ArrayList<Room>(); // create rooms map
 		this.trees = new ArrayList<int[]>(); // create arraylist for tree positon array(row,col)
 		createMap();
-		loadImage();
+		load();
 	}
 	
 	// Generate background title
@@ -99,7 +99,7 @@ public class Map implements Serializable{
 	}
 	
 	// Load image asset
-	private void loadImage(){
+	public void load(){
 		this.tileImages = new HashMap<Integer,BufferedImage>();
 		
 		try {

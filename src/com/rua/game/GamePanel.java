@@ -44,7 +44,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	 * Game loop start
 	 * Define thread. Control game action
 	 */
-	public void loopStart () {
+	public void loopStart() {
 		System.out.println("Starting ");
 		
 		// Thread for game loop
@@ -141,17 +141,39 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			/********** Save Game *************/
 		if (keyCode == KeyEvent.VK_2 && !playing) {
 			try {
-		         FileOutputStream fileOut = new FileOutputStream("tmp/game.ser");
-		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
-		         out.writeObject(game);
-		         out.close();
-		         fileOut.close();
-		         System.out.printf("Serialized data is saved in tmp/game.ser");
+		        FileOutputStream fileOut = new FileOutputStream("tmp/game.ser");
+		        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		        out.writeObject(game);
+		        out.close();
+		        fileOut.close();
+		        System.out.printf("Serialized data is saved in tmp/game.ser");
 		     }catch(IOException i) {
-		          i.printStackTrace();
+		        i.printStackTrace();
 		     }
 		}
 		else
+			/********** Load Game *************/
+		if (keyCode == KeyEvent.VK_3 && !playing) {
+			try {
+				FileInputStream fileIn = new FileInputStream("tmp/game.ser");
+				ObjectInputStream in = new ObjectInputStream(fileIn);
+				game = (GameEngine) in.readObject();
+				game.load();
+				playing = true;
+				loopStart();
+				in.close();
+				fileIn.close();
+			}catch(IOException i) {
+			     i.printStackTrace();
+			     return;
+			}catch(ClassNotFoundException c) {
+			     System.out.println("GameEngine class not found");
+			     c.printStackTrace();
+			     return;
+			}
+		}
+		else
+			/********** Game Play Control *************/
 		if (keyCode == KeyEvent.VK_UP)
 			game.keyUp(); 
 		else
