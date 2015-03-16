@@ -24,6 +24,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	private boolean playing = false;
 	private Thread gameLoop;
 	private Thread gameListener;
+	private Thread waterUp;
 
 		
 	public GamePanel() {
@@ -82,6 +83,24 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		});
 		
 		gameListener.start();
+		
+		// Thread for game listener
+		waterUp = new Thread ( new Runnable() {
+			public void run() {
+				int step = 4; // the row and column will be fill up by water
+				while(step != -1) {
+					step = game.waterUp(step); // recursion, step will return from function then become parameter
+					try {
+						Thread.sleep(1000); // listen every 3 second
+					}
+					catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		
+		waterUp.start();
 	}
 	
 	
@@ -138,6 +157,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		if (keyCode == KeyEvent.VK_ESCAPE && playing) {
 			gameLoop.suspend();
 			gameListener.suspend();
+			waterUp.suspend();
 			playing = false;
 		}
 		else
@@ -145,6 +165,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		if (keyCode == KeyEvent.VK_ESCAPE && !playing && game != null) {
 			gameLoop.resume();
 			gameListener.resume();
+			waterUp.resume();
 			playing = true;
 		}
 		else

@@ -175,13 +175,15 @@ public class Map implements Serializable{
 	// show tree, assign tree image to maptile
 	public void showTrees() {
 		for(int[] tree : trees) {
-			setMapTile(tree[0], tree[1], TREE);
+			if( mapTiles[tree[0]][tree[1]] != WATER )
+				setMapTile(tree[0], tree[1], TREE);
 		}
 	}
 	// hide tree, assign ground image to maptile
 	public void hideTrees() {
 		for(int[] tree : trees) {
-			setMapTile(tree[0], tree[1], TREE_HIDE);
+			if( mapTiles[tree[0]][tree[1]] != WATER )
+				setMapTile(tree[0], tree[1], TREE_HIDE);
 		}
 	}
 	/*

@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 
 public class GameEngine implements Serializable{
@@ -216,7 +217,7 @@ public class GameEngine implements Serializable{
 	
 	public void listen() {
 
-		if( collection.size() == COLLECTION ) {
+		if( collection.size() >= COLLECTION ) {
 			battery.setConsume(false);
 			infoBar.message("Congratulation, You Win!!"); // if collect enough stuffs
 		}
@@ -245,9 +246,37 @@ public class GameEngine implements Serializable{
 		infoBar.setBattery( battery.getLevel() );
 	}
 	
-	public void waterUp() {
+	/*
+	 * Make the water around the map increase by time randomly
+	 * Use thread
+	 */
+	public int waterUp(int n) {
 		int[][] mapTiles = map.getMapTiles();
+		int unfilledTiles = 0;
+
+		int tilesPerTime = 3;
+		for(int i=0; i <= tilesPerTime; i++) { // loop through row
+			Random ran = new Random();
+			int x = ran.nextInt(Map.MAP_SIZEX - n) + n; // generate random number between n and max row or col
+			System.out.println(x);
+			map.setMapTile(n, x, Map.WATER);  // set up row
+			map.setMapTile(x, n, Map.WATER);  // set left col
+			map.setMapTile(Map.MAP_SIZEX - n - 1, x, Map.WATER); // set bottom row
+			map.setMapTile(x, Map.MAP_SIZEY - n - 1, Map.WATER); // set right col
+		}
+		
+		for(int j=n; j <  Map.MAP_SIZEX - n; j++) {
+			if( (mapTiles[n][j] != Map.WATER ) )
+				unfilledTiles++;
+		}
+		
+		if( unfilledTiles == 0 )
+			if ( n < Map.MAP_SIZEX )
+				n++;
+		
+		return n;
 	}
+	
 	/*
 	 * KeyEvent. Get key events to Key Listener
 	 */
