@@ -12,6 +12,9 @@ import java.io.*;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	// Window dimension 
@@ -39,6 +42,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		//loopStart();
 		
 		addKeyListener(this);  // Add key listener to this GamePanel
+		playSound();
 	}
 	
 	/*
@@ -235,4 +239,18 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {}
 
+	
+	private void playSound() {
+		try {
+			InputStream in = new FileInputStream("Assets/Music/bgmusic.wav");
+			// create an audiostream from the inputstream
+		    AudioStream audioStream = new AudioStream(in);
+		    // play the audio clip with the audioplayer class
+		    AudioPlayer.player.start(audioStream);
+	    }
+	    catch (Exception e)
+	    {
+	    	e.printStackTrace();
+	    }
+	}
 }
