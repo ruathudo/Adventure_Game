@@ -5,13 +5,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-public class Map {
+public class Map implements Serializable{
+	private static final long serialVersionUID = 1L;
 	public static final int TILE_SIZE = 32;
 	public static final int MAP_SIZEX  = 40; // tile numbers
 	public static final int MAP_SIZEY  = 40;
@@ -36,7 +38,7 @@ public class Map {
 
 	
 	private int[][] mapTiles;
-	private HashMap<Integer,BufferedImage> tileImages;
+	private transient HashMap<Integer,BufferedImage> tileImages;
 	private ArrayList<Room> rooms;
 	private ArrayList<int[]> trees;
 	private int x, y;  // Map position

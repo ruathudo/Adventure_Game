@@ -3,10 +3,13 @@ package com.rua.game;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class InfoBar {
+public class InfoBar implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private int stuffNum;
 	private int battery;
 	private int key;
@@ -16,8 +19,8 @@ public class InfoBar {
 		stuffNum = 0;
 		battery = 100;
 		key = 1;
-		time = 200;
-		message = "dcmmm vkll";
+		time = GameEngine.TIME;
+		message = "";
 	}
 	
 	public void draw(Graphics g) {
@@ -38,7 +41,6 @@ public class InfoBar {
 	public void setBattery(int n) { battery = n;}
 	public void addStuff() { stuffNum++; }
 	public void setTime(int n) { time += n; }
-	public int getTime() { return time; }
 	
 	public void message(String s) {
 		message = s;

@@ -4,11 +4,13 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-public class Player {
+public class Player implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private int x, y;   // position
 	private int vX = 0;  // velocity
 	private int vY = 0;
@@ -16,8 +18,8 @@ public class Player {
 	private boolean down;
 	private boolean left;
 	private boolean right;
-	private BufferedImage player;
-	private ArrayList<BufferedImage> playerAssets = new ArrayList<BufferedImage>();
+	private transient BufferedImage player;
+	private transient ArrayList<BufferedImage> playerAssets = new ArrayList<BufferedImage>();
 	
 	public Player() {
 		try {

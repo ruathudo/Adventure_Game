@@ -2,12 +2,18 @@ package com.rua.game;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class GameEngine {
+public class GameEngine implements Serializable{
+	/**
+	 * Serialize object for saving
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final int COLLECTION = 25; // number of stuff in collection to win
+	public static final int TIME = 200; // maximum time before bomb execute
 	
 	private Map map;
 	private Player player;
@@ -17,6 +23,7 @@ public class GameEngine {
 	private ArrayList<Thing> collection;  // contain Thing objects
 	private HashMap<String, Key> keys;  // contain keys to access the rooms
 	private Battery battery;
+	private int timePlay;
 	
 	public GameEngine() {
 		map = new Map();
@@ -24,8 +31,10 @@ public class GameEngine {
 		collection = new ArrayList<Thing>();
 		keys = new HashMap<String,Key>();
 		keys.put("#Room1", new Key("#Room1")); // Generate key for first room
+		timePlay = TIME;
 		battery = new Battery();
 		infoBar = new InfoBar(); // Game information Bar
+
 	}
 	
 	public void draw(Graphics g) {
@@ -199,11 +208,15 @@ public class GameEngine {
 		if( collection.size() == COLLECTION ) // if collect enough stuffs
 			System.out.println("Win!!");
 		
-		if( battery.checkConsume() )   // listen for battery if is consuming
+		if( battery.checkConsume() ) {  // listen for battery if is consuming
 			infoBar.setBattery( battery.getLevel() );
+			battery.consume(1);
+		}
 		
-		if( infoBar.getTime() > 0)
+		if( this.timePlay > 0){
+			this.timePlay--;   // minus timePlay every second
 			infoBar.setTime(-1);
+		}
 		else
 			System.out.println("Loose!!");
 	}

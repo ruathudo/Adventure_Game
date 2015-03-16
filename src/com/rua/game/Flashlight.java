@@ -1,6 +1,9 @@
 package com.rua.game;
 
-public class Flashlight extends Thing {
+import java.io.Serializable;
+
+public class Flashlight extends Thing implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private boolean onState;  // on = true, off = false
 
 	public Flashlight() {

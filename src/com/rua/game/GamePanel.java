@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.*;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -21,6 +22,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	private Menu menu;
 	private Timer tm = new Timer(30, this); // Timer for Action Listener interval
 	private boolean playing = false;
+	private Thread gameLoop;
+	private Thread gameListener;
 
 		
 	public GamePanel() {
@@ -45,7 +48,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		System.out.println("Starting ");
 		
 		// Thread for game loop
-		Thread gameLoop = new Thread ( new Runnable() {
+		gameLoop = new Thread ( new Runnable() {
 			public void run() {
 	
 				while(true) {
@@ -63,7 +66,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		gameLoop.start();
 		
 		// Thread for game listener
-		Thread gameListener = new Thread ( new Runnable() {
+		gameListener = new Thread ( new Runnable() {
 			public void run() {
 	
 				while(true) {
@@ -109,14 +112,44 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	/*
 	 * KeyEvent. Get key events to Key Listener
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		
+			/********** Pause Game *************/
+		if (keyCode == KeyEvent.VK_ESCAPE && playing) {
+			gameLoop.suspend();
+			gameListener.suspend();
+			playing = false;
+		}
+		else
+			/********** Resume Game *************/
+		if (keyCode == KeyEvent.VK_ESCAPE && !playing) {
+			gameLoop.resume();
+			gameListener.resume();
+			playing = true;
+		}
+		else
+			/********** Start New Game *************/
 		if (keyCode == KeyEvent.VK_1 && !playing) {
 			game = new GameEngine();
 			loopStart();
 			playing = true;
+		}
+		else
+			/********** Save Game *************/
+		if (keyCode == KeyEvent.VK_2 && !playing) {
+			try {
+		         FileOutputStream fileOut = new FileOutputStream("tmp/game.ser");
+		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		         out.writeObject(game);
+		         out.close();
+		         fileOut.close();
+		         System.out.printf("Serialized data is saved in tmp/game.ser");
+		     }catch(IOException i) {
+		          i.printStackTrace();
+		     }
 		}
 		else
 		if (keyCode == KeyEvent.VK_UP)
