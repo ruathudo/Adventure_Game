@@ -9,6 +9,7 @@ public class Game {
 		window.add(new GamePanel());
 		window.pack();
 		window.setVisible(true);
+		window.setResizable(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	

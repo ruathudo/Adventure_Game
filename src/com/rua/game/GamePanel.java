@@ -9,11 +9,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.*;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements ActionListener, KeyListener{
@@ -239,14 +240,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {}
 
-	
+
 	private void playSound() {
 		try {
-			InputStream in = new FileInputStream("Assets/Music/bgmusic.wav");
-			// create an audiostream from the inputstream
-		    AudioStream audioStream = new AudioStream(in);
-		    // play the audio clip with the audioplayer class
-		    AudioPlayer.player.start(audioStream);
+			File soundFile = new File("Assets/Music/bgmusic.wav");
+	        AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+	         // Get a sound clip resource.
+	        Clip clip = AudioSystem.getClip();
+	         // Open audio clip and load samples from the audio input stream.
+	        clip.open(audioIn);
+	         //clip.start();
+	        clip.loop(Clip.LOOP_CONTINUOUSLY);
 	    }
 	    catch (Exception e)
 	    {

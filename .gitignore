@@ -38,4 +38,4 @@ Thumbs.db
 
 # custom #
 *.psd
-/bin/*
+bin/*
